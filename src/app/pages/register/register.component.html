@@ -1,0 +1,91 @@
+<div class="min-h-screen flex items-center justify-center lg:justify-end md:p-16 bg-[url('/bgloginruninit.png')] bg-cover bg-center bg-no-repeat">
+  <div class="w-full md:w-[80%] lg:w-[30%] lg:min-w-90 flex items-center justify-center px-6 py-12 md:px-10 md:py-10 bg-red-900/10 backdrop-blur-xs md:rounded-4xl">
+    <div class="w-full max-w-sm">
+
+      <div class="flex justify-center mb-6">
+        <img src="/logoFormRuninit.png" alt="Runinit" class="w-64 h-auto">
+      </div>
+
+      <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="space-y-5">
+        <div>
+          <label for="nome" class="block text-sm font-medium text-white">Nome</label>
+          <input type="text" id="nome" formControlName="nome" autocomplete="name"
+                class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md bg-white/70 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+          @if (registerForm.controls.nome.touched) {
+            @if (registerForm.controls.nome.hasError('required')) {
+              <p class="mt-1 text-sm text-red-300">Informe seu nome.</p>
+            } @else if (registerForm.controls.nome.hasError('minlength')) {
+              <p class="mt-1 text-sm text-red-300">O nome precisa ter no mínimo 2 caracteres.</p>
+            }
+          }
+        </div>
+
+        <div>
+          <label for="email" class="block text-sm font-medium text-white">E-mail</label>
+          <input type="email" id="email" formControlName="email" autocomplete="email"
+                 class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md bg-white/70 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+          @if (registerForm.controls.email.touched && registerForm.controls.email.invalid) {
+            <p class="mt-1 text-sm text-red-300">Informe um e-mail válido.</p>
+          }
+        </div>
+
+        <div>
+          <label for="confirmEmail" class="block text-sm font-medium text-white">Confirme o e-mail</label>
+          <input type="email" id="confirmEmail" formControlName="confirmEmail" autocomplete="off"
+                 class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md bg-white/70 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+          @if (registerForm.hasError('confirmEmailDiferente') && registerForm.controls.confirmEmail.touched) {
+            <p class="mt-1 text-sm text-red-300">Os e-mails não coincidem.</p>
+          }
+        </div>
+
+
+        <div>
+          <label for="dataNascimento" class="block text-sm font-medium text-white">Data de nascimento</label>
+          <input type="date" id="dataNascimento" formControlName="dataNascimento" autocomplete="bday" [max]="hoje"
+                class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md bg-white/70 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+          @if (registerForm.controls.dataNascimento.touched && registerForm.controls.dataNascimento.errors) {
+            @if (registerForm.controls.dataNascimento.hasError('required')) {
+              <p class="mt-1 text-sm text-red-300">Informe a data de nascimento.</p>
+            } @else if (registerForm.controls.dataNascimento.hasError('dataFutura')) {
+              <p class="mt-1 text-sm text-red-300">A data não pode estar no futuro.</p>
+            } @else if (registerForm.controls.dataNascimento.hasError('idadeMinima')) {
+              <p class="mt-1 text-sm text-red-300">É preciso ter pelo menos 18 anos para se cadastrar.</p>
+            }
+          }
+        </div>
+
+        <div>
+          <label for="senha" class="block text-sm font-medium text-white">Senha</label>
+          <input type="password" id="senha" formControlName="senha" autocomplete="new-password"
+                 class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md bg-white/70 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+          @if (registerForm.controls.senha.touched && registerForm.controls.senha.invalid) {
+            <p class="mt-1 text-sm text-red-300">A senha precisa ter pelo menos 8 caracteres.</p>
+          }
+        </div>
+
+        <div>
+          <label for="confirmSenha" class="block text-sm font-medium text-white">Confirme a senha</label>
+          <input type="password" id="confirmSenha" formControlName="confirmSenha" autocomplete="new-password"
+                 class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md bg-white/70 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+          @if (registerForm.hasError('confirmSenhaDiferente') && registerForm.controls.confirmSenha.touched) {
+            <p class="mt-1 text-sm text-red-300">As senhas não coincidem.</p>
+          }
+        </div>
+
+        @if (erro()) {
+          <p class="text-sm text-red-300 text-center">{{ erro() }}</p>
+        }
+
+        <button type="submit" [disabled]="enviando()"
+                class="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-red-700 hover:bg-red-950 disabled:bg-gray-500 disabled:cursor-not-allowed focus:outline-none transition-colors md:cursor-pointer">
+          {{ enviando() ? 'Cadastrando...' : 'Cadastrar' }}
+        </button>
+
+        <div class="w-full flex items-center justify-center gap-2">
+          <span class="text-sm text-white/80">Já possui uma conta?</span>
+          <a routerLink="/register" class="text-sm font-semibold text-white hover:underline">Entrar</a>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
